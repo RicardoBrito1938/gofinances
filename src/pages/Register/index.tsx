@@ -26,6 +26,10 @@ interface FormData {
   amount: string;
 }
 
+type NavigationProps = {
+  navigate: (screen: string) => void;
+};
+
 const schema = Yup.object().shape({
   name: Yup.string().required("Nome é obrigatório"),
   amount: Yup.number()
@@ -43,7 +47,7 @@ export const Register = () => {
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const dataKey = "@gofinances:transactions";
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProps>();
 
   const {
     control,
@@ -54,7 +58,7 @@ export const Register = () => {
     resolver: yupResolver(schema)
   });
 
-  const handleTransactionTypeSelect = (type: "up" | "down") => {
+  const handleTransactionTypeSelect = (type: "positive" | "negative") => {
     setTransactionType(type);
   };
 
@@ -79,7 +83,7 @@ export const Register = () => {
       id: String(uuid.v4()),
       name: form.name,
       amount: form.amount,
-      transactionType,
+      type: transactionType,
       category: category.key,
       date: new Date()
     };
@@ -131,16 +135,16 @@ export const Register = () => {
             />
             <TransactionTypes>
               <TransactionTypeButton
-                isActive={transactionType === "up"}
+                isActive={transactionType === "positive"}
                 type="up"
                 title="income"
-                onPress={() => handleTransactionTypeSelect("up")}
+                onPress={() => handleTransactionTypeSelect("positive")}
               />
               <TransactionTypeButton
-                isActive={transactionType === "down"}
+                isActive={transactionType === "negative"}
                 type="down"
                 title="outcome"
-                onPress={() => handleTransactionTypeSelect("down")}
+                onPress={() => handleTransactionTypeSelect("negative")}
               />
             </TransactionTypes>
 
