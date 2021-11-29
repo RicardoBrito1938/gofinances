@@ -42,11 +42,12 @@ export const Dashboard = () => {
           style: "currency",
           currency: "BRL"
         });
-        const date = Intl.DateTimeFormat("pt-BR", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "2-digit"
-        }).format(new Date(transaction.date));
+
+        // const date = Intl.DateTimeFormat("pt-BR", {
+        //   day: "2-digit",
+        //   month: "2-digit",
+        //   year: "2-digit"
+        // }).format(new Date(transaction.date));
 
         return {
           id: transaction.id,
@@ -54,7 +55,7 @@ export const Dashboard = () => {
           amount,
           type: transaction.type,
           category: transaction.category,
-          date
+          date: new Date().getTime()
         };
       }
     );
