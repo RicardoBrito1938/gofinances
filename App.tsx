@@ -1,6 +1,8 @@
 import React from "react";
 import { ThemeProvider } from "styled-components";
 import AppLoading from "expo-app-loading";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+
 import {
   useFonts,
   Poppins_400Regular,
