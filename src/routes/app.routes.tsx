@@ -5,6 +5,7 @@ import { Dashboard } from "../pages/Dashboard";
 import { Register } from "../pages/Register";
 import { useTheme } from "styled-components";
 import { Platform } from "react-native";
+import { Resume } from "../pages/Resume";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -48,7 +49,7 @@ export const AppRoutes = () => {
       />
       <Screen
         name="Resumo"
-        component={Register}
+        component={Resume}
         options={{
           tabBarIcon: ({ size, color }) => (
             <MaterialIcons name="pie-chart" size={size} color={color} />
