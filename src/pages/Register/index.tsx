@@ -20,6 +20,7 @@ import {
 } from "./styles";
 import { useNavigation } from "@react-navigation/native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useAuth } from "../../hooks/auth";
 
 interface FormData {
   name: string;
@@ -39,13 +40,14 @@ const schema = Yup.object().shape({
 });
 
 export const Register = () => {
+  const { user } = useAuth();
   const [category, setCategory] = useState({
     key: "category",
     name: "Categoria"
   });
   const [transactionType, setTransactionType] = useState("");
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
-  const dataKey = "@gofinances:transactions";
+  const dataKey = `@gofinances:transactions_user:${user.id}`;
 
   const navigation = useNavigation<NavigationProps>();
 
