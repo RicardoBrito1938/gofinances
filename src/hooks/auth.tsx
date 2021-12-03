@@ -27,6 +27,8 @@ interface IAuthContextData {
   user: User;
   signInWIthGoogle(): Promise<void>;
   signInWithApple(): Promise<void>;
+  signOut(): Promise<void>;
+  userStorageLoading: boolean;
 }
 
 interface AuthorizationResponse {
@@ -40,7 +42,7 @@ const AuthContext = createContext({} as IAuthContextData);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User>({} as User);
-  const [loading, setIsLoading] = useState(true);
+  const [userStorageLoading, setUserStorageLoading] = useState(true);
 
   const signInWIthGoogle = async () => {
     try {
@@ -88,11 +90,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       });
 
       if (credential) {
+        const name = credential.fullName!.givenName!;
+        const photo = `https://ui-avatars.com/api/?name=${name}&length=1`;
+
         const userLogged = {
           id: String(credential.user),
           email: credential.email!,
-          name: credential.fullName!.givenName!,
-          photo: undefined
+          name,
+          photo
         };
 
         setUser(userLogged);
@@ -106,6 +111,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  const signOut = async () => {
+    setUser({} as User);
+    await AsyncStorage.removeItem("@gofinances:user");
+  };
+
   useEffect(() => {
     const loadUserStorageData = async () => {
       const userStoraged = await AsyncStorage.getItem("@gofinances:user");
@@ -114,7 +124,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         const userLogged = JSON.parse(userStoraged) as User;
         setUser(userLogged);
       }
-      setIsLoading(false);
+      setUserStorageLoading(false);
     };
     loadUserStorageData();
   }, []);
@@ -122,7 +132,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const providerValues = {
     user,
     signInWIthGoogle,
-    signInWithApple
+    signInWithApple,
+    signOut,
+    userStorageLoading
   };
 
   return (
